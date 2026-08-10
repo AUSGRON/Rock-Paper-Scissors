@@ -1,41 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Paper Scissor</title>
+    <title>Rock Paper Scissors</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
- <h1>Rock Paper Scissor</h1>
 
-<div class="choices">
-    <div class="choice" id="rock">
-        <img src="rock.png" alt="">
-    </div> <div class="choice" id="paper">
-        <img src="paper.png" alt="">
-    </div> <div class="choice" id="scissors">
-        <img src="scissors.png" alt="">
-    </div>
-</div>
+    <div class="background-glow glow-1"></div>
+    <div class="background-glow glow-2"></div>
 
-<div class="score-board">
-    <div class="score">
-        <p id="user-score">0</p>
-        <p>You</p>
-    </div>
-    <div class="score">
-        <p id="comp-score">0</p>
-        <p>Computer</p>
-    </div>
-</div>
+    <main class="game-container">
 
-<div class="msg-container">
-    <p id="msg">Play Your Move</p>
-</div>
-<script src="app.js"></script>
+        <header class="hero">
+            <div class="badge">✦ ARCADE ARENA</div>
+            <h1>Rock <span>Paper</span> Scissors</h1>
+            <p>Choose your move and defeat the computer.</p>
+        </header>
+
+        <section class="game-card">
+
+            <div class="section-label">MAKE YOUR MOVE</div>
+
+            <div class="choices">
+
+                <div class="choice" id="rock">
+                    <div class="choice-inner">
+                        <img src="rock.png" alt="Rock">
+                    </div>
+                    <span>Rock</span>
+                </div>
+
+                <div class="choice" id="paper">
+                    <div class="choice-inner">
+                        <img src="paper.png" alt="Paper">
+                    </div>
+                    <span>Paper</span>
+                </div>
+
+                <div class="choice" id="scissors">
+                    <div class="choice-inner">
+                        <img src="scissors.png" alt="Scissors">
+                    </div>
+                    <span>Scissors</span>
+                </div>
+
+            </div>
+
+            <div class="score-board">
+
+                <div class="score-card">
+                    <span class="score-label">YOU</span>
+                    <p id="user-score">0</p>
+                    <span class="score-status">PLAYER</span>
+                </div>
+
+                <div class="vs">
+                    <span>VS</span>
+                </div>
+
+                <div class="score-card">
+                    <span class="score-label">COMPUTER</span>
+                    <p id="comp-score">0</p>
+                    <span class="score-status">AI OPPONENT</span>
+                </div>
+
+            </div>
+
+            <div class="msg-container">
+                <div class="message-icon">⚡</div>
+                <p id="msg">Play Your Move</p>
+            </div>
+
+        </section>
+
+        <footer>
+            <span>GOOD LUCK</span>
+            <span>•</span>
+            <span>HAVE FUN</span>
+        </footer>
+
+    </main>
+
+    <script src="app.js"></script>
 </body>
-
 </html>
