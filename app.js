@@ -1,72 +1,147 @@
-// 1. DATA & DOM SELECTION
-let userScore = 0; // Tracks the player's score
-let compScore = 0; // Tracks the computer's score
+// ================================
+// GAME DATA
+// ================================
 
-// Grabbing elements from the HTML so we can interact with them
-const choices = document.querySelectorAll(".choice"); // The 3 buttons/images
-const msg = document.querySelector("#msg");          // The message banner (Win/Loss/Tie)
-const userScorePara = document.querySelector("#user-score"); // Where we display player score
-const compScorePara = document.querySelector("#comp-score"); // Where we display computer score
+let userScore = 0;
+let compScore = 0;
 
-// 2. GENERATE COMPUTER CHOICE
+const choices = document.querySelectorAll(".choice");
+const msg = document.querySelector("#msg");
+const userScorePara = document.querySelector("#user-score");
+const compScorePara = document.querySelector("#comp-score");
+
+
+// ================================
+// COMPUTER CHOICE
+// ================================
+
 const genCompChoice = () => {
     const options = ["rock", "paper", "scissors"];
-    // Math.random() gives a number between 0-1. 
-    // Multiplying by 3 and using floor gives us 0, 1, or 2 (perfect for array indexes)
-    const randIdx = Math.floor(Math.random() * 3);
-    return options[randIdx]; // Returns "rock", "paper", or "scissors"
-}
+    const randIdx = Math.floor(Math.random() * options.length);
 
-// 3. HANDLING A DRAW
-const drawGame = () => {
-    msg.innerText = "Game Was A Tie"; 
-    msg.style.backgroundColor = "#daa520"; // Changes banner to gold color
-}
+    return options[randIdx];
+};
 
-// 4. HANDLING THE WINNER
-const showWinner = (userWin, userChoice, compChoice) => {
-    if (userWin) {
-        userScore++; // Increase player score by 1
-        userScorePara.innerText = userScore; // Update the UI
-        msg.innerText = `You Win! Your ${userChoice} Beats ${compChoice}`;
-        msg.style.backgroundColor = "green";
-    } else {
-        compScore++; // Increase computer score by 1
-        compScorePara.innerText = compScore; // Update the UI
-        msg.innerText = `You Lose! ${compChoice} Beats Your ${userChoice}`;
-        msg.style.backgroundColor = "red";
+
+// ================================
+// MESSAGE STYLING
+// ================================
+
+const setMessage = (text, type) => {
+
+    msg.innerText = text;
+
+    if (type === "win") {
+        msg.style.backgroundColor = "rgba(34, 197, 94, 0.12)";
+        msg.style.borderColor = "rgba(34, 197, 94, 0.35)";
+        msg.style.color = "#86efac";
     }
-}
 
-// 5. THE MAIN GAME ENGINE
+    else if (type === "lose") {
+        msg.style.backgroundColor = "rgba(239, 68, 68, 0.12)";
+        msg.style.borderColor = "rgba(239, 68, 68, 0.35)";
+        msg.style.color = "#fca5a5";
+    }
+
+    else {
+        msg.style.backgroundColor = "rgba(245, 158, 11, 0.12)";
+        msg.style.borderColor = "rgba(245, 158, 11, 0.35)";
+        msg.style.color = "#fcd34d";
+    }
+};
+
+
+// ================================
+// DRAW
+// ================================
+
+const drawGame = () => {
+    setMessage("Game Was A Tie", "draw");
+};
+
+
+// ================================
+// WINNER
+// ================================
+
+const showWinner = (userWin, userChoice, compChoice) => {
+
+    if (userWin) {
+
+        userScore++;
+
+        userScorePara.innerText = userScore;
+
+        setMessage(
+            `You Win! ${userChoice} beats ${compChoice}`,
+            "win"
+        );
+
+    } else {
+
+        compScore++;
+
+        compScorePara.innerText = compScore;
+
+        setMessage(
+            `You Lose! ${compChoice} beats ${userChoice}`,
+            "lose"
+        );
+    }
+};
+
+
+// ================================
+// MAIN GAME
+// ================================
+
 const playGame = (userChoice) => {
-    const compChoice = genCompChoice(); // Get the computer's move
+
+    const compChoice = genCompChoice();
 
     if (userChoice === compChoice) {
-        drawGame(); // If moves are the same, it's a tie
+
+        drawGame();
+
     } else {
-        let userWin = true; // We start by assuming the user won, then check conditions
+
+        let userWin;
 
         if (userChoice === "rock") {
-            // If user has Rock, they only lose if Computer has Paper
-            userWin = compChoice === "paper" ? false : true;
-        } else if (userChoice === "paper") {
-            // If user has Paper, they only lose if Computer has Scissors   
-            userWin = compChoice === "scissors" ? false : true;
-        } else {
-            // If user has Scissors, they only lose if Computer has Rock
-            userWin = compChoice === "rock" ? false : true;
+            userWin = compChoice === "scissors";
         }
-        showWinner(userWin, userChoice, compChoice); // Update the screen
-    }
-}
 
-// 6. INITIALIZING THE GAME
-// This adds an "EventListener" to every choice button
+        else if (userChoice === "paper") {
+            userWin = compChoice === "rock";
+        }
+
+        else {
+            userWin = compChoice === "paper";
+        }
+
+        showWinner(userWin, userChoice, compChoice);
+    }
+};
+
+
+// ================================
+// CLICK EVENTS
+// ================================
+
 choices.forEach((choice) => {
+
     choice.addEventListener("click", () => {
-        // We assume the ID of the HTML element is "rock", "paper", or "scissors"
+
         const userChoice = choice.getAttribute("id");
-        playGame(userChoice); // Start the logic!
+
+        // Small click animation
+        choice.style.transform = "scale(0.94)";
+
+        setTimeout(() => {
+            choice.style.transform = "";
+        }, 120);
+
+        playGame(userChoice);
     });
+
 });
