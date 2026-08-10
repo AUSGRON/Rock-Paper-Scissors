@@ -1,79 +1,142 @@
-// ================================
-// GAME DATA
-// ================================
+```javascript
+// ===============================
+// GAME STATE
+// ===============================
 
 let userScore = 0;
 let compScore = 0;
+let round = 1;
+
+
+// ===============================
+// DOM ELEMENTS
+// ===============================
 
 const choices = document.querySelectorAll(".choice");
+
 const msg = document.querySelector("#msg");
-const userScorePara = document.querySelector("#user-score");
-const compScorePara = document.querySelector("#comp-score");
+
+const userScorePara =
+    document.querySelector("#user-score");
+
+const compScorePara =
+    document.querySelector("#comp-score");
+
+const roundElement =
+    document.querySelector("#round");
+
+const resultIcon =
+    document.querySelector("#result-icon");
 
 
-// ================================
-// COMPUTER CHOICE
-// ================================
+// ===============================
+// COMPUTER MOVE
+// ===============================
 
 const genCompChoice = () => {
-    const options = ["rock", "paper", "scissors"];
-    const randIdx = Math.floor(Math.random() * options.length);
 
-    return options[randIdx];
+    const options = [
+        "rock",
+        "paper",
+        "scissors"
+    ];
+
+    const randomIndex =
+        Math.floor(
+            Math.random() * options.length
+        );
+
+    return options[randomIndex];
 };
 
 
-// ================================
-// MESSAGE STYLING
-// ================================
+// ===============================
+// RESULT MESSAGE
+// ===============================
 
-const setMessage = (text, type) => {
+const showResult = (
+    text,
+    type
+) => {
 
     msg.innerText = text;
 
+
     if (type === "win") {
-        msg.style.backgroundColor = "rgba(34, 197, 94, 0.12)";
-        msg.style.borderColor = "rgba(34, 197, 94, 0.35)";
+
         msg.style.color = "#86efac";
+
+        resultIcon.innerText = "🏆";
+
+        resultIcon.style.background =
+            "rgba(34,197,94,.1)";
+
+        resultIcon.style.borderColor =
+            "rgba(34,197,94,.25)";
     }
+
 
     else if (type === "lose") {
-        msg.style.backgroundColor = "rgba(239, 68, 68, 0.12)";
-        msg.style.borderColor = "rgba(239, 68, 68, 0.35)";
+
         msg.style.color = "#fca5a5";
+
+        resultIcon.innerText = "💀";
+
+        resultIcon.style.background =
+            "rgba(239,68,68,.1)";
+
+        resultIcon.style.borderColor =
+            "rgba(239,68,68,.25)";
     }
+
 
     else {
-        msg.style.backgroundColor = "rgba(245, 158, 11, 0.12)";
-        msg.style.borderColor = "rgba(245, 158, 11, 0.35)";
+
         msg.style.color = "#fcd34d";
+
+        resultIcon.innerText = "⚡";
+
+        resultIcon.style.background =
+            "rgba(245,158,11,.1)";
+
+        resultIcon.style.borderColor =
+            "rgba(245,158,11,.25)";
     }
 };
 
 
-// ================================
+// ===============================
 // DRAW
-// ================================
+// ===============================
 
 const drawGame = () => {
-    setMessage("Game Was A Tie", "draw");
+
+    showResult(
+        "It's a tie — try again!",
+        "draw"
+    );
 };
 
 
-// ================================
+// ===============================
 // WINNER
-// ================================
+// ===============================
 
-const showWinner = (userWin, userChoice, compChoice) => {
+const showWinner = (
+    userWin,
+    userChoice,
+    compChoice
+) => {
 
     if (userWin) {
 
         userScore++;
 
-        userScorePara.innerText = userScore;
+        userScorePara.innerText =
+            userScore;
 
-        setMessage(
-            `You Win! ${userChoice} beats ${compChoice}`,
+        showResult(
+            `Victory! ${userChoice} beats ${compChoice}`,
             "win"
         );
 
@@ -81,23 +144,26 @@ const showWinner = (userWin, userChoice, compChoice) => {
 
         compScore++;
 
-        compScorePara.innerText = compScore;
+        compScorePara.innerText =
+            compScore;
 
-        setMessage(
-            `You Lose! ${compChoice} beats ${userChoice}`,
+        showResult(
+            `Defeat! ${compChoice} beats ${userChoice}`,
             "lose"
         );
     }
 };
 
 
-// ================================
-// MAIN GAME
-// ================================
+// ===============================
+// GAME ENGINE
+// ===============================
 
 const playGame = (userChoice) => {
 
-    const compChoice = genCompChoice();
+    const compChoice =
+        genCompChoice();
+
 
     if (userChoice === compChoice) {
 
@@ -107,41 +173,82 @@ const playGame = (userChoice) => {
 
         let userWin;
 
+
         if (userChoice === "rock") {
-            userWin = compChoice === "scissors";
+
+            userWin =
+                compChoice === "scissors";
+
         }
+
 
         else if (userChoice === "paper") {
-            userWin = compChoice === "rock";
+
+            userWin =
+                compChoice === "rock";
+
         }
+
 
         else {
-            userWin = compChoice === "paper";
+
+            userWin =
+                compChoice === "paper";
         }
 
-        showWinner(userWin, userChoice, compChoice);
+
+        showWinner(
+            userWin,
+            userChoice,
+            compChoice
+        );
     }
+
+
+    round++;
+
+    roundElement.innerText =
+        round;
 };
 
 
-// ================================
+// ===============================
 // CLICK EVENTS
-// ================================
+// ===============================
 
-choices.forEach((choice) => {
+choices.forEach(choice => {
 
-    choice.addEventListener("click", () => {
+    choice.addEventListener(
+        "click",
+        () => {
 
-        const userChoice = choice.getAttribute("id");
+            const userChoice =
+                choice.id;
 
-        // Small click animation
-        choice.style.transform = "scale(0.94)";
 
-        setTimeout(() => {
-            choice.style.transform = "";
-        }, 120);
+            // Click animation
+            choice.animate(
+                [
+                    {
+                        transform: "scale(1)"
+                    },
+                    {
+                        transform: "scale(.92)"
+                    },
+                    {
+                        transform: "scale(1)"
+                    }
+                ],
+                {
+                    duration: 180,
+                    easing: "ease-out"
+                }
+            );
 
-        playGame(userChoice);
-    });
+
+            playGame(userChoice);
+        }
+    );
 
 });
+```
